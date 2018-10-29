@@ -6,50 +6,18 @@ from googletrans import Translator
 import os
 import requests
 
-bot = commands.Bot(command_prefix='?t')
+bot = commands.Bot(command_prefix=':t')
 bot.remove_command('help')
 
 """ready message"""
 @bot.event
 async def on_ready():  
     if(len(bot.servers)==1):
-        await bot.change_presence(game=discord.Game(name='?thelp with '+str(len(bot.servers))+" server"))
+        await bot.change_presence(game=discord.Game(name=':thelp with '+str(len(bot.servers))+" server"))
     else:
-        await bot.change_presence(game=discord.Game(name='?thelp with '+str(len(bot.servers))+" servers"))
+        await bot.change_presence(game=discord.Game(name=':thelp with '+str(len(bot.servers))+" servers"))
     print('Translator v1.0 --')
     print('Successfully joined account: ' + bot.user.name)
-
-"""server leave message"""
-@bot.event
-async def on_server_remove(server):    
-    r = requests.post('https://discordbots.org/api/bots/460891148668502026/stats',
-    data = {"server_count": str(len(bot.servers))},
-    headers = {'Authorization': str(os.environ.get('AUTH_TOKEN'))})
-    r
-    if(len(bot.servers)==1):
-        await bot.change_presence(game=discord.Game(name='?thelp with '+str(len(bot.servers))+" server"))
-    else:
-        await bot.change_presence(game=discord.Game(name='?thelp with '+str(len(bot.servers))+" servers"))
-    
-"""server join message"""
-@bot.event
-async def on_server_join(server):    
-    r = requests.post('https://discordbots.org/api/bots/460891148668502026/stats',
-    data = {"server_count": str(len(bot.servers))},
-    headers = {'Authorization': str(os.environ.get('AUTH_TOKEN'))})
-    r
-    if(len(bot.servers)==1):
-        await bot.change_presence(game=discord.Game(name='?thelp with '+str(len(bot.servers))+" server"))
-    else:
-        await bot.change_presence(game=discord.Game(name='?thelp with '+str(len(bot.servers))+" servers"))
-    f_message=0
-    for channel in server.channels:
-        if str(channel.permissions_for(server.me).send_messages) == "True" and str(channel.type)=="text" and f_message==0:
-            embed = discord.Embed(title="I, the discordtranslate bot, have arrived", description="Hello everyone I'm the translator bot here to translate your sentences, long or short, i don't care.\n\nIf you enjoy my work, please go vote for me at https://discordbots.org/bot/460891148668502026/vote \nthank you :3")
-            embed.set_footer(text="?thelp [i send a help message directly to you.]")
-            embed.set_author(name="author: wilisburg#6234", icon_url="https://cdn.discordapp.com/avatars/360744809717039104/5c9b878c62f027d2fbbd20e47b364cf6.jpg")
-            await bot.send_message(channel, embed=embed)
-            f_message=1;
 
 """translating"""            
 @bot.command(pass_context=True)
@@ -101,11 +69,6 @@ async def r(ctx, *arg):
 """direct help message"""
 @bot.command(pass_context=True)
 async def help(ctx):
-    await bot.send_message(ctx.message.author, "```[] ?tr 'text' s-'source language tag' d-'destination language tag' \n -translates a message \n -if source language tag is not provided it will be assigned automatically \n -if destination language tag is not provided it's automatically set as english(en) \n *do not use the apostrophe(') \n[] ?tinvite \n -sends a message to the message author with the auth to bot```")
+    await bot.send_message(ctx.message.author, "```[] :tr 'text' s-'source language tag' d-'destination language tag' \n -translates a message \n -if source language tag is not provided it will be assigned automatically \n -if destination language tag is not provided it's automatically set as english(en) \n *do not use the apostrophe(')```")
 
-"""invite to server"""
-@bot.command(pass_context=True)
-async def invite(ctx):
-    await bot.send_message(ctx.message.author, "https://discordapp.com/oauth2/authorize?client_id=460891148668502026&permissions=8192&scope=bot")
-    
-bot.run(str(os.environ.get('BOT_TOKEN')))
+bot.run(str(os.environ.get('TOKEN')))
